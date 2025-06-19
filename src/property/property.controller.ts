@@ -16,6 +16,7 @@ import { UpdatePropertyDto } from './dto/update-property.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { GetUser } from '../auth/decorators/get-user.decorator';
 import { User } from '../user/entity/user.entity';
+import { PropertyResponseDto } from './dto/property-response.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('properties')
@@ -23,18 +24,23 @@ export class PropertyController {
   constructor(private readonly propertyService: PropertyService) {}
 
   @Post()
-  create(@Body() dto: CreatePropertyDto, @GetUser() user: User) {
+  create(
+    @Body() dto: CreatePropertyDto,
+    @GetUser() user: User,
+  ): Promise<PropertyResponseDto> {
     return this.propertyService.create(dto, user);
   }
 
   @Get()
-  findAll(@GetUser() user: User) {
+  findAll(@GetUser() user: User): Promise<PropertyResponseDto[]> {
     return this.propertyService.findAllByUser(user.id);
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number, @GetUser() user: User) {
-    console.log('user', user);
+  findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
+  ): Promise<PropertyResponseDto> {
     return this.propertyService.findOne(id, user.id);
   }
 
@@ -43,7 +49,7 @@ export class PropertyController {
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdatePropertyDto,
     @GetUser() user: User,
-  ) {
+  ): Promise<PropertyResponseDto> {
     return this.propertyService.update(id, dto, user.id);
   }
 

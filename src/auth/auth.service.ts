@@ -1,4 +1,4 @@
-// auth.service.ts
+// src/auth/auth.service.ts
 import {
   Injectable,
   UnauthorizedException,
@@ -6,13 +6,13 @@ import {
   Logger,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { UserService } from '../user/user.service';
 import { User } from '../user/entity/user.entity';
 import { AuthResponseDto } from './dto/auth-response.dto';
 import { UserResponseDto } from './dto/user-response.dto';
+import { hashPassword, comparePassword } from '../common/utils/hash.util';
 
 @Injectable()
 export class AuthService {
@@ -29,13 +29,10 @@ export class AuthService {
       throw new BadRequestException('Email already registered');
     }
 
-    const hashedPassword = await bcrypt.hash(
-      dto.password,
-      await bcrypt.genSalt(),
-    );
+    const hashed = await hashPassword(dto.password);
     const user = await this.userService.create({
       ...dto,
-      password: hashedPassword,
+      password: hashed,
     });
 
     this.logger.log(`New user registered: ${dto.email}`);
@@ -44,7 +41,7 @@ export class AuthService {
 
   async login(dto: LoginDto): Promise<AuthResponseDto> {
     const user = await this.userService.findByEmail(dto.email);
-    if (!user || !(await bcrypt.compare(dto.password, user.password))) {
+    if (!user || !(await comparePassword(dto.password, user.password))) {
       throw new UnauthorizedException('Invalid email or password');
     }
 
