@@ -23,7 +23,6 @@ npm run start
 Create a file named .env.development in the root folder and paste the following:
 
 ```bash
-**Database Configuration**
 
 DB_HOST=localhost
 DB_PORT=5432
@@ -32,7 +31,6 @@ DB_PASS=0000
 DB_NAME=postgres
 TYPEORM_SYNC=true
 
- **JWT Configuration**
 
 JWT_SECRET=abedalnabi
 JWT_EXPIRES_IN=1d
