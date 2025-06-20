@@ -24,7 +24,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('me')
   getProfile(@GetUser() user: CurrentUser) {
-    console.log('user');
+    console.log('user', user);
     return user;
   }
 }

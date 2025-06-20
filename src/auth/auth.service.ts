@@ -50,7 +50,7 @@ export class AuthService {
   }
 
   private generateToken(user: Partial<User>): AuthResponseDto {
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.id, name: user.name, email: user.email };
 
     const userResponse: UserResponseDto = {
       id: user.id!,

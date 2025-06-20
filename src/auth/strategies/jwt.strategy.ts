@@ -32,6 +32,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     return Promise.resolve({
       id: payload.sub,
+      name: payload.name,
       email: payload.email,
     });
   }
