@@ -20,6 +20,9 @@ import { PropertyModule } from './property/property.module';
         database: configService.get<string>('database.database'),
         synchronize: configService.get<boolean>('database.synchronize'),
         autoLoadEntities: true,
+        ssl: {
+          rejectUnauthorized: false,
+        },
       }),
       inject: [ConfigService],
     }),
